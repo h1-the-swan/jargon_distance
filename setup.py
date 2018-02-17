@@ -21,6 +21,6 @@ setup(
     url='https://github.com/h1-the-swan/jargon_distance',
     license=license,
     packages=find_packages(exclude=('tests', 'docs')),
-    install_requires=['six']
+    install_requires=['numpy', 'six']
 )
 
