@@ -7,7 +7,7 @@ Initialize a JargonDistance instance with a term_counts dict and (optionally) a 
 ```
 from jargon_distance import JargonDistance
 j = JargonDistance(term_counts)
-"""
+```
 
 Then, calculate the jargon distances:
 
