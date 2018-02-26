@@ -1,5 +1,5 @@
 from collections import defaultdict, Counter
-from six import itervalues, iteritems
+from six import iterkeys, itervalues, iteritems
 from numpy import log2
 from timeit import default_timer as timer
 import logging
@@ -19,13 +19,29 @@ class JargonDistance(object):
     def __init__(self, term_counts=None, group_map=None, alpha=ALPHA):
         """
 
-        :term_counts: TODO
-        :group_map: TODO
+        :term_counts: a dictionary mapping documents to term counts
+        :group_map: a dictionary mapping documents to groups (default: put each document in its own group)
+
+        Initialize a JargonDistance instance with a term_counts dict and (optionally) a group_map dict:
+
+        j = JargonDistance(term_counts)
+
+        Then, calculate the jargon distances:
+
+        j.calculate_jargon_distance()
+        j.write_to_file('jargon_distance.csv')
 
         """
         self.term_counts = term_counts  # {document -> {term: Counter}}
+        if not isinstance (self.term_counts, dict):
+            raise RuntimeError("JargonDistance instance must be initialized with a dictionary of document -> term counter")
+
         self.group_map = group_map  # {document -> group}
-        self.groups = set(group for group in itervalues(group_map))
+        if self.group_map is None:
+            # default behavior: put each document in its own group
+            self.group_map = {doc: doc for doc in iterkeys(self.term_counts)}
+
+        self.groups = set(group for group in itervalues(self.group_map))
         self.group_term_prob = defaultdict(dict)  # {group -> {term: prob}}
         self.global_prob = dict()  # {term -> prob}
         self.alpha = alpha  # teleport probability
