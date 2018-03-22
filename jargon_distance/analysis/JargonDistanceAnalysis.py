@@ -29,7 +29,7 @@ from scipy import version
 from scipy.cluster.hierarchy import linkage, dendrogram
 from scipy.spatial.distance import squareform, is_valid_y
 
-from xml_method_utils import get_group_map
+# from .xml_method_utils import get_group_map
 
 # CATEGORIES_FILE = 'data_v2/categories.csv'  # maps documents to categories
 # LABELMAP_FILE = 'arxiv-categories.csv'  # maps abbreviated category names (e.g., "nuc-th") to long names
@@ -170,12 +170,14 @@ class JargonDistanceAnalysis(object):
         if G is None:
             G = self.G
         G_sym = nx.Graph()
-        for u, v in G.edges_iter():
+        # for u, v in G.edges_iter():
+        for u, v in G.edges():
             if not G_sym.has_edge(u, v):
                 weight_uv = G[u][v]['weight']
                 weight_vu = G[v][u]['weight']
                 weight_sym = ( weight_uv + weight_vu ) / 2
-                G_sym.add_edge(u, v, {'weight': weight_sym})
+                # G_sym.add_edge(u, v, {'weight': weight_sym})
+                G_sym.add_edge(u, v, weight=weight_sym)
         self.G_sym = G_sym
         return G_sym
 
@@ -307,7 +309,7 @@ class JargonDistanceAnalysis(object):
             plt.show()
         return fig, den
 
-    def make_sns_clustermap(self, distance_matrix=None, labels=None, Z=None, figsize=(45,40), metric_label="Distance", show_plot=False, save=None, save_dpi=300, nonzero_diagonal=False):
+    def make_sns_clustermap(self, distance_matrix=None, labels=None, Z=None, figsize=None, metric_label="Distance", show_plot=False, save=None, save_dpi=300, nonzero_diagonal=False):
         """make a clustermap (heatmap with dendrograms) using seaborn
 
         :distance_matrix: dataframe
@@ -329,9 +331,9 @@ class JargonDistanceAnalysis(object):
         if distance_matrix is None:
             arr = nx.to_numpy_matrix(G)
             distance_matrix = pd.DataFrame(arr, index=labels, columns=labels)
-        fig, ax = plt.subplots(figsize=figsize)
+        # fig, ax = plt.subplots(figsize=figsize)
         # cm = sns.clustermap(distance_matrix, row_linkage=Z, col_linkage=Z, cbar_kws={'label': metric_label}, ax=ax)
-        cm = sns.clustermap(distance_matrix, row_linkage=Z, col_linkage=Z, cbar_kws={'label': metric_label})
+        cm = sns.clustermap(distance_matrix, row_linkage=Z, col_linkage=Z, figsize=figsize, cbar_kws={'label': metric_label})
         for item in cm.ax_heatmap.get_yticklabels():
             item.set_rotation(0)
         if save:
@@ -341,7 +343,7 @@ class JargonDistanceAnalysis(object):
         # cf = plt.gcf()
         if show_plot is True:
             plt.show()
-        return fig, cm
+        return cm
 
     def prepare_clustergrammer_data(self, outfname='clustergrammer_data.json', G=None):
         """for a distance matrix, output a clustergrammer JSON file
