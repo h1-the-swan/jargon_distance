@@ -160,7 +160,7 @@ class JargonDistance(object):
         """
 
         start = timer()
-        logger.info("Calculating jargon distance...")
+        logger.debug("Calculating jargon distance...")
         if alpha is None:
             alpha = self.alpha
         if not ( self.group_term_prob and self.global_prob ):
@@ -172,8 +172,9 @@ class JargonDistance(object):
 
 
         self.jargon_distance = self._calc_jargon_dist(self.groups, self.entropy, self.cross_entropy, alpha=alpha)
-        logger.info("done. Took {:.2f} seconds".format(timer()-start))
-        return self.jargon_distance
+        logger.debug("done. Took {:.2f} seconds".format(timer()-start))
+        # return self.jargon_distance
+        return self
 
     def write_to_file(self, fname, jargon_distance=None, sep=','):
         """write the jargon distances to a (csv) file
@@ -183,7 +184,7 @@ class JargonDistance(object):
         :sep: separator (delimiter). default ','
 
         """
-        logger.info("Writing to file: {}".format(fname))
+        logger.debug("Writing to file: {}".format(fname))
         if jargon_distance is None:
             jargon_distance = self.jargon_distance
 

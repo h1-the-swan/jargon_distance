@@ -105,11 +105,14 @@ class JargonDistanceAnalysis(object):
             G = self.remove_small_categories(G, thresh=self.threshold)
         return G
 
-    def from_file(self, fname, sep=','):
-        G = self.load_jargondistance_file(fname, sep=sep)
-        return self
+    @classmethod
+    def from_file(cls, fname, sep=','):
+        j = cls()
+        G = j.load_jargondistance_file(fname, sep=sep)
+        return j
 
-    def from_object(self, j):
+    @classmethod
+    def from_object(cls, j):
         """load jargon distances from a JargonDistance object
         (instead of loading from a file)
 
@@ -120,8 +123,9 @@ class JargonDistanceAnalysis(object):
         for group1, v in iteritems(j.jargon_distance):
             for group2, val in iteritems(v):
                 G.add_edge(group1, group2, weight=val)
-        self.G = G
-        return self
+        j = cls()
+        j.G = G
+        return j
 
 
     def remove_small_categories(self, G=None, 
@@ -179,7 +183,6 @@ class JargonDistanceAnalysis(object):
                 # G_sym.add_edge(u, v, {'weight': weight_sym})
                 G_sym.add_edge(u, v, weight=weight_sym)
         self.G_sym = G_sym
-        return G_sym
 
     def get_labelmap(self, labelmap_fname=None, sep=',', 
                         header=True, reverse=False,
@@ -307,7 +310,7 @@ class JargonDistanceAnalysis(object):
         # cf = plt.gcf()
         if show_plot is True:
             plt.show()
-        return fig, den
+        # return fig, den
 
     def make_sns_clustermap(self, distance_matrix=None, labels=None, Z=None, figsize=None, metric_label="Distance", show_plot=False, save=None, save_dpi=300, nonzero_diagonal=False):
         """make a clustermap (heatmap with dendrograms) using seaborn
@@ -343,7 +346,7 @@ class JargonDistanceAnalysis(object):
         # cf = plt.gcf()
         if show_plot is True:
             plt.show()
-        return cm
+        # return cm
 
     def prepare_clustergrammer_data(self, outfname='clustergrammer_data.json', G=None):
         """for a distance matrix, output a clustergrammer JSON file
