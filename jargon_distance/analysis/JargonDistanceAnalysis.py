@@ -51,7 +51,6 @@ class JargonDistanceAnalysis(object):
         """
         self.jargondistance_fname = jargondistance_fname
         self.group_map = group_map
-        self.categories_file = categories_file
         self.labelmap = labelmap
         if not self.labelmap:
             self.labelmap_file = labelmap_file
