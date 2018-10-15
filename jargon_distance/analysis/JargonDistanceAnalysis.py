@@ -33,8 +33,6 @@ from scipy.spatial.distance import squareform, is_valid_y
 
 # CATEGORIES_FILE = 'data_v2/categories.csv'  # maps documents to categories
 # LABELMAP_FILE = 'arxiv-categories.csv'  # maps abbreviated category names (e.g., "nuc-th") to long names
-CATEGORIES_FILE = 'categories_20180222.tsv'  # maps documents to categories
-LABELMAP_FILE = 'labelmap_broad_20180222.tsv'  # maps abbreviated category names (e.g., "nuc-th") to long names
 
 class JargonDistanceAnalysis(object):
 
@@ -42,9 +40,9 @@ class JargonDistanceAnalysis(object):
 
     def __init__(self, 
                     jargondistance_fname=None,
-                    categories_file=CATEGORIES_FILE,
+                    group_map=None,
                     labelmap=None,
-                    labelmap_file=LABELMAP_FILE,
+                    labelmap_file=None,
                     threshold=None):
         """TODO: to be defined1.
 
@@ -52,6 +50,7 @@ class JargonDistanceAnalysis(object):
 
         """
         self.jargondistance_fname = jargondistance_fname
+        self.group_map = group_map
         self.categories_file = categories_file
         self.labelmap = labelmap
         if not self.labelmap:
@@ -107,9 +106,9 @@ class JargonDistanceAnalysis(object):
 
     @classmethod
     def from_file(cls, fname, sep=','):
-        j = cls()
-        G = j.load_jargondistance_file(fname, sep=sep)
-        return j
+        ja = cls()
+        G = ja.load_jargondistance_file(fname, sep=sep)
+        return ja
 
     @classmethod
     def from_object(cls, j):
@@ -123,13 +122,14 @@ class JargonDistanceAnalysis(object):
         for group1, v in iteritems(j.jargon_distance):
             for group2, val in iteritems(v):
                 G.add_edge(group1, group2, weight=val)
-        j = cls()
-        j.G = G
-        return j
+        ja = cls()
+        ja.G = G
+        ja.group_map = j.group_map
+        return ja
 
 
     def remove_small_categories(self, G=None, 
-                                categories_file=CATEGORIES_FILE, 
+                                categories_file=None, 
                                 thresh=None, 
                                 return_remove=False):
         """Given a networkx graphs with nodes representing categories, 
@@ -154,14 +154,26 @@ class JargonDistanceAnalysis(object):
 
         # group_map = get_group_map(categories_file)
         # cats_df = pd.DataFrame.from_dict(group_map, orient='index').rename(columns={0: 'category'})
-        cats_df = pd.read_csv(categories_file, sep='\t')
-        vc = cats_df.category.value_counts().sort_values()
-        vc = vc[vc<=thresh]
-        remove = vc.index.tolist()
-        G.remove_nodes_from(remove)
-        if return_remove:
-            return G, remove
-        return G
+        if categories_file:
+            cats_df = pd.read_csv(categories_file, sep='\t')
+            vc = cats_df.category.value_counts().sort_values()
+            vc = vc[vc<=thresh]
+            remove = vc.index.tolist()
+            G.remove_nodes_from(remove)
+            if return_remove:
+                return G, remove
+            return G
+        elif self.group_map:
+            vc = pd.Series(self.group_map).value_counts()
+            vc = vc[vc<=thresh]
+            remove = vc.index.tolist()
+            G.remove_nodes_from(remove)
+            if return_remove:
+                return G, remove
+            return G
+        else:
+            raise RuntimeError("need to specify either a categories_file or a JargonDistanceAnalysis.group_map")
+
 
     def symmetrize_graph(self, G=None):
         """Create a symmetrized version of the networkx graph G
