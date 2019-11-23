@@ -12,10 +12,11 @@ with open('LICENSE') as f:
     license = f.read()
 
 setup(
-    name='jargon_distance',
+    name='jargon-distance',
     version='0.1.0',
     description='Calculate jargon distance metric between texts',
     long_description=readme,
+    long_description_content_type='text/markdown',
     author='Jason Portenoy',
     author_email='jason.portenoy@gmail.com',
     url='https://github.com/h1-the-swan/jargon_distance',
