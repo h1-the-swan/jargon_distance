@@ -3,7 +3,7 @@ decorator==4.2.1
 kiwisolver==1.0.1
 matplotlib==2.2.2
 networkx==2.1
-nltk==3.2.5
+nltk==3.4.5
 numpy==1.14.0
 pandas==0.22.0
 pyparsing==2.2.0
