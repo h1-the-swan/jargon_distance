@@ -20,7 +20,7 @@ setup(
     author_email='jason.portenoy@gmail.com',
     url='https://github.com/h1-the-swan/jargon_distance',
     license=license,
-    packages=find_packages(exclude=('tests', 'docs')),
+    packages=find_packages(exclude=('tests', 'docs', 'text_data')),
     install_requires=['numpy', 'six'],
     include_package_data=True
 )
