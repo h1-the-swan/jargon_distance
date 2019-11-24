@@ -321,7 +321,8 @@ class JargonDistanceAnalysis(object):
         # cf = plt.gcf()
         if show_plot is True:
             plt.show()
-        # return fig, den
+        else:
+            return fig, den
 
     def make_sns_clustermap(self, distance_matrix=None, labels=None, Z=None, figsize=None, metric_label="Distance", show_plot=False, save=None, save_dpi=300, nonzero_diagonal=False):
         """make a clustermap (heatmap with dendrograms) using seaborn
