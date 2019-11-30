@@ -13,7 +13,7 @@ with open('LICENSE') as f:
 
 setup(
     name='jargon-distance',
-    version='0.1.0',
+    version='0.1.5',
     description='Calculate jargon distance metric between texts',
     long_description=readme,
     long_description_content_type='text/markdown',
