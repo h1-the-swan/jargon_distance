@@ -1,3 +1,3 @@
 # Jargon Distance Analysis module
 
-Requires `pandas`, `networkx`, `matplotlib`, `seaborn`.
+Requires `pandas`, `numpy`, `scipy`, `networkx`, `matplotlib`, `seaborn`.

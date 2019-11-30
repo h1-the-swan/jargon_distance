@@ -2,17 +2,17 @@
 
 Jason Portenoy 2018
 
-Implement the jargon distance measure from [Vilhena et al. “Finding Cultural Holes: How Structure and Culture Diverge in Networks of Scholarly Communication.” (2014)](https://doi.org/10.15195/v1.a15)
+Implement the jargon distance measure from <a href="https://doi.org/10.15195/v1.a15" target="_blank">Vilhena et al. “Finding Cultural Holes: How Structure and Culture Diverge in Networks of Scholarly Communication.” (2014)</a>
 
 ### Installation
 
-Download from PyPI:
+Install from PyPI:
 
 `pip install jargon-distance`
 
 ### Usage
 
-Initialize a JargonDistance instance with a `term_counts` dict and (optionally) a `group_map` dict.
+Initialize a `JargonDistance` instance with a `term_counts` dict and (optionally) a `group_map` dict.
 `term_counts` is a mapping of document -> term counter (Counter object).
 
 ```
